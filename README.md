@@ -217,23 +217,77 @@ Principais hooks:
 
 ## 14. Módulos
 
-Angular usa módulos para organizar a aplicação.
+Angular usa módulos para organizar a aplicação em partes reutilizáveis, escaláveis e com responsabilidades bem definidas.
 
-Criação:
+### 📦 O que é um Módulo Angular?
+
+Um módulo é uma classe decorada com `@NgModule`, que agrupa:
+- Componentes
+- Diretivas
+- Pipes
+- Serviços
+- Outros módulos
+
+### 🧱 Estrutura de um módulo:
+
+```ts
+@NgModule({
+  declarations: [MeusComponentes],
+  imports: [OutrosMódulos],
+  exports: [ComponentesQueQueroReusar],
+  providers: [ServiçosGlobaisOuLocais]
+})
+export class MeuModulo {}
+```
+
+### 🗂️ Pasta `modules`
+
+A pasta `modules` serve para organizar melhor a aplicação. Exemplo de uso:
+
+- `auth/` → tudo de login e autenticação
+- `admin/` → páginas de administração
+- `shared/` → componentes e serviços reutilizáveis
+
+### 💡 Criar um módulo:
 
 ```bash
 ng generate module nome
 ```
 
-Importação:
+### 🔄 SharedComponentModule (Módulo Compartilhado)
+
+Você pode (e deve) criar um módulo para componentes reutilizáveis, como botões, inputs, etc.
+
+#### Exemplo:
 
 ```ts
 @NgModule({
-  imports: [CommonModule],
-  declarations: [MeuComponente]
+  declarations: [ButtonComponent, InputComponent],
+  imports: [CommonModule, ReactiveFormsModule],
+  exports: [ButtonComponent, InputComponent]
 })
-export class MeuModulo {}
+export class SharedComponentModule {}
 ```
+
+### ✅ Como usar em outros módulos
+
+```ts
+import { SharedComponentModule } from '../components/shared-component.module';
+
+@NgModule({
+  imports: [SharedComponentModule]
+})
+export class PagesModule {}
+```
+
+### 📌 Resumo
+
+| Elemento       | Para que serve                                                |
+|----------------|---------------------------------------------------------------|
+| `declarations` | Componentes, diretivas e pipes que pertencem a este módulo    |
+| `imports`      | Outros módulos que este módulo precisa                        |
+| `exports`      | O que será compartilhado com outros módulos                   |
+| `providers`    | Serviços disponíveis para injeção de dependência              |
 
 ---
 
@@ -288,4 +342,3 @@ Gera a versão final otimizada na pasta `dist/`.
 - Separe responsabilidades com `smart` e `dumb components`
 
 ---
-
