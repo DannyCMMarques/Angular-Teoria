@@ -129,20 +129,113 @@ Tipos:
 
 ## 9. Pipes
 
-Transformações no template:
+## 📌 O que são Pipes?
+- Pipes são operadores usados em templates Angular para transformar dados de forma declarativa.
+- Utilizam o caractere `|` (pipe) e funcionam como funções de transformação.
+- Exemplo: `{{ amount | currency }}`
 
+---
+
+## 🧰 Pipes Embutidos (Built-in)
+| Nome              | Descrição                                                                 |
+|-------------------|---------------------------------------------------------------------------|
+| `AsyncPipe`       | Lê valores de `Promise` ou `Observable`.                                 |
+| `CurrencyPipe`    | Formata número como moeda conforme a localidade.                         |
+| `DatePipe`        | Formata datas conforme a localidade.                                     |
+| `DecimalPipe`     | Formata números decimais.                                                 |
+| `I18nPluralPipe`  | Pluralização com base em regras locais.                                  |
+| `I18nSelectPipe`  | Seleção de valores com base em chaves.                                   |
+| `JsonPipe`        | Transforma objeto em string JSON (útil para debug).                      |
+| `KeyValuePipe`    | Transforma objetos/Map em arrays de chave-valor.                         |
+| `LowerCasePipe`   | Texto para letras minúsculas.                                             |
+| `UpperCasePipe`   | Texto para letras maiúsculas.                                             |
+| `PercentPipe`     | Formata número como percentual.                                           |
+| `SlicePipe`       | Retorna uma parte de um array ou string.                                 |
+| `TitleCasePipe`   | Texto para título (primeira letra maiúscula de cada palavra).            |
+
+---
+
+## 🧪 Como usar Pipes
 ```html
-{{ preco | currency:'BRL' }}
-{{ data | date:'dd/MM/yyyy' }}
+<!-- Aplica o pipe de moeda -->
+<p>Total: {{ amount | currency }}</p>
 ```
 
-Custom pipe:
+## 🔗 Combinando múltiplos pipes
+```html
+<!-- Primeiro aplica date e depois uppercase -->
+<p>{{ scheduledOn | date | uppercase }}</p>
+```
 
-```bash
-ng generate pipe nome
+## ⚙️ Passando parâmetros para Pipes
+```html
+<!-- Formata a hora -->
+<p>{{ scheduledOn | date:'hh:mm' }}</p>
+
+<!-- Formata a hora e define fuso horário -->
+<p>{{ scheduledOn | date:'hh:mm':'UTC' }}</p>
 ```
 
 ---
+
+## 🧠 Como Pipes funcionam
+- Pipes são **funções puras** por padrão: só executam quando o valor de entrada muda.
+- Isso evita cálculos desnecessários e melhora a performance.
+
+## 🔢 Precedência de operadores
+- Pipe (`|`) tem **baixa precedência**, por isso use parênteses:
+```html
+{{ (firstName + lastName) | uppercase }}
+```
+
+---
+
+## 🛠️ Criando Pipes personalizados
+
+### 1. Estrutura básica
+```ts
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({ name: 'kebabCase' })
+export class KebabCasePipe implements PipeTransform {
+  transform(value: string): string {
+    return value.toLowerCase().replace(/ /g, '-');
+  }
+}
+```
+
+### 2. Nomeação
+- Nome do pipe: **camelCase**
+- Nome da classe: **PascalCase + Pipe**
+
+### 3. Adicionando parâmetros
+```ts
+transform(value: string, format: string): string {
+  return format === 'uppercase' ? value.toUpperCase() : value;
+}
+```
+
+---
+
+## ⚠️ Pipes Impuros
+- Detectam mudanças **internas** em objetos/arrays.
+- São marcados com `pure: false` (evite se possível por motivos de performance).
+
+```ts
+@Pipe({ name: 'joinNamesImpure', pure: false })
+export class JoinNamesImpurePipe implements PipeTransform {
+  transform(names: string[]): string {
+    return names.join();
+  }
+}
+```
+
+---
+
+## 📚 Conclusão
+- Pipes são poderosos para formatar e transformar dados em templates.
+- Prefira pipes puros sempre que possível.
+- Use pipes personalizados para reutilizar lógicas de transformação.
 
 ## 10. Roteamento (Routing)
 
