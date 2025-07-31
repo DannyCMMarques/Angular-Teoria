@@ -115,15 +115,91 @@ Tipos:
 
 ---
 
-## 8. Diretivas
+# 8. Diretivas no Angular
 
-### Estruturais
-- `*ngIf`: Condicional
-- `*ngFor`: Repetição
-- `*ngSwitch`
+As diretivas são instruções usadas no HTML para alterar o **comportamento ou a aparência** de elementos DOM.
 
-### Atributo
-- `[ngClass]`, `[ngStyle]`
+---
+
+## 🧱 1. Diretivas Estruturais
+
+Alteram a **estrutura do DOM**, adicionando ou removendo elementos com base em lógica.
+
+### `*ngIf`
+Exibe o elemento apenas se a condição for verdadeira.
+
+```html
+<div *ngIf="usuarioLogado">Bem-vindo!</div>
+```
+
+---
+
+### `*ngFor`
+Itera sobre uma lista.
+
+```html
+<li *ngFor="let item of lista">{{ item }}</li>
+```
+
+---
+
+### `*ngSwitch`
+Usado para condições múltiplas com `ngSwitchCase` e `ngSwitchDefault`.
+
+```html
+<div [ngSwitch]="tipo">
+  <p *ngSwitchCase="'admin'">Admin</p>
+  <p *ngSwitchCase="'user'">Usuário</p>
+  <p *ngSwitchDefault>Desconhecido</p>
+</div>
+```
+
+---
+
+## 🎨 2. Diretivas de Atributo
+
+Alteram a **aparência ou comportamento** de elementos existentes, sem alterar a estrutura do DOM.
+
+### `[ngClass]`
+Adiciona ou remove classes dinamicamente.
+
+```html
+<div [ngClass]="{ ativo: isAtivo }"></div>
+```
+
+---
+
+### `[ngStyle]`
+Aplica estilos inline dinamicamente.
+
+```html
+<div [ngStyle]="{ color: corTexto, fontSize: '20px' }"></div>
+```
+
+---
+
+## 🛠️ 3. Diretivas Personalizadas
+
+Você pode criar diretivas reutilizáveis para aplicar comportamentos personalizados.
+
+### Exemplo:
+
+```ts
+@Directive({
+  selector: '[appHighlight]'
+})
+export class HighlightDirective {
+  constructor(el: ElementRef) {
+    el.nativeElement.style.backgroundColor = 'yellow';
+  }
+}
+```
+
+### Uso:
+
+```html
+<p appHighlight>Texto com fundo amarelo</p>
+```
 
 ---
 
